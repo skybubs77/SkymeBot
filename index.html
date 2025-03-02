@@ -60,7 +60,7 @@
         document.getElementById("message").value = ""; // Clear input
 
         try {
-            let response = await fetch("https://your-glitch-project.glitch.me/chat", {  // ✅ Correct API URL
+            let response = await fetch("https://ritzy-admitted-responsibility.glitch.me/", {  // ✅ Correct API URL
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ prompt: userInput, history: [] })  // ✅ Send correct JSON format
