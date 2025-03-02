@@ -49,7 +49,7 @@
     <input type="text" id="message" placeholder="Type a message">
     <button onclick="sendMessage()">Send</button>
 
-    <script>
+<script>
     async function sendMessage() {
         let userInput = document.getElementById("message").value;
         if (!userInput) return;
@@ -60,10 +60,10 @@
         document.getElementById("message").value = ""; // Clear input
 
         try {
-            let response = await fetch("https://your-glitch-project.glitch.me/chat", {  // 🔹 FIXED API URL
+            let response = await fetch("https://your-glitch-project.glitch.me/chat", {  // ✅ Correct API URL
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ prompt: userInput, history: [] })  // 🔹 FIXED JSON FORMAT
+                body: JSON.stringify({ prompt: userInput, history: [] })  // ✅ Send correct JSON format
             });
 
             if (!response.ok) {
@@ -80,6 +80,7 @@
         chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
     }
 </script>
+
 
 
 </body>
