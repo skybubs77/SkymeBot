@@ -50,36 +50,37 @@
     <button onclick="sendMessage()">Send</button>
 
     <script>
-        async function sendMessage() {
-            let userInput = document.getElementById("message").value;
-            if (!userInput) return;
+    async function sendMessage() {
+        let userInput = document.getElementById("message").value;
+        if (!userInput) return;
 
-            let chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML += `<p class="user-message">You: ${userInput}</p>`;
+        let chatBox = document.getElementById("chat-box");
+        chatBox.innerHTML += `<p class="user-message">You: ${userInput}</p>`;
 
-            document.getElementById("message").value = ""; // Clear input
+        document.getElementById("message").value = ""; // Clear input
 
-            try {
-                let response = await fetch("https://your-glitch-project.glitch.me/chat", {  // 🔹 Replace with your Glitch URL
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ message: userInput })
-                });
+        try {
+            let response = await fetch("https://your-glitch-project.glitch.me/chat", {  // 🔹 FIXED API URL
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ prompt: userInput, history: [] })  // 🔹 FIXED JSON FORMAT
+            });
 
-                if (!response.ok) {
-                    throw new Error("Server error: " + response.statusText);
-                }
-
-                let data = await response.json();
-                chatBox.innerHTML += `<p class="bot-message">SkymeBot: ${data.response}</p>`;
-            } catch (error) {
-                chatBox.innerHTML += `<p class="error-message">Error: Could not connect to API.</p>`;
-                console.error("API Error:", error);
+            if (!response.ok) {
+                throw new Error("Server error: " + response.statusText);
             }
 
-            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+            let data = await response.json();
+            chatBox.innerHTML += `<p class="bot-message">SkymeBot: ${data.response}</p>`;
+        } catch (error) {
+            chatBox.innerHTML += `<p class="error-message" style="color:red;">Error: Could not connect to API.</p>`;
+            console.error("API Error:", error);
         }
-    </script>
+
+        chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
+    }
+</script>
+
 
 </body>
 </html>
