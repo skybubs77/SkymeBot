@@ -34,11 +34,8 @@
         .bot-message {
             color: white;
         }
-        .code-block {
-            font-family: monospace;
-            background: #111;
-            padding: 5px;
-            border-radius: 5px;
+        .error-message {
+            color: red;
         }
     </style>
 </head>
@@ -62,21 +59,25 @@
 
             document.getElementById("message").value = ""; // Clear input
 
-            let response = await fetch("https://ritzy-admitted-responsibility.glitch.me/", {  // Replace with your Glitch URL
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ message: userInput })
-            });
+            try {
+                let response = await fetch("https://your-glitch-project.glitch.me/chat", {  // 🔹 Replace with your Glitch URL
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ message: userInput })
+                });
 
-            let data = await response.json();
-            let botMessage = formatResponse(data.response);
-            chatBox.innerHTML += `<p class="bot-message">SkymeBot: ${botMessage}</p>`;
-            
-            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to new message
-        }
+                if (!response.ok) {
+                    throw new Error("Server error: " + response.statusText);
+                }
 
-        function formatResponse(text) {
-            return text.replace(/```([\s\S]*?)```/g, '<pre class="code-block">$1</pre>'); // Code block styling
+                let data = await response.json();
+                chatBox.innerHTML += `<p class="bot-message">SkymeBot: ${data.response}</p>`;
+            } catch (error) {
+                chatBox.innerHTML += `<p class="error-message">Error: Could not connect to API.</p>`;
+                console.error("API Error:", error);
+            }
+
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll
         }
     </script>
 
