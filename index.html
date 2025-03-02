@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkymeBot Chat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: #eee;
+            text-align: center;
+            padding: 20px;
+        }
+        .chat-box {
+            width: 50%;
+            margin: auto;
+            border: 1px solid #555;
+            padding: 10px;
+            background: #333;
+            text-align: left;
+            min-height: 200px;
+            overflow-y: auto;
+        }
+        input, button {
+            font-size: 18px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .user-message {
+            color: lightblue;
+            font-weight: bold;
+        }
+        .bot-message {
+            color: white;
+        }
+        .code-block {
+            font-family: monospace;
+            background: #111;
+            padding: 5px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>SkymeBot Chat</h1>
+    <div class="chat-box" id="chat-box">
+        <p>Welcome to SkymeBot!</p>
+    </div>
+
+    <input type="text" id="message" placeholder="Type a message">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        async function sendMessage() {
+            let userInput = document.getElementById("message").value;
+            if (!userInput) return;
+
+            let chatBox = document.getElementById("chat-box");
+            chatBox.innerHTML += `<p class="user-message">You: ${userInput}</p>`;
+
+            document.getElementById("message").value = ""; // Clear input
+
+            let response = await fetch("https://ritzy-admitted-responsibility.glitch.me/", {  // Replace with your Glitch URL
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            });
+
+            let data = await response.json();
+            let botMessage = formatResponse(data.response);
+            chatBox.innerHTML += `<p class="bot-message">SkymeBot: ${botMessage}</p>`;
+            
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to new message
+        }
+
+        function formatResponse(text) {
+            return text.replace(/```([\s\S]*?)```/g, '<pre class="code-block">$1</pre>'); // Code block styling
+        }
+    </script>
+
+</body>
+</html>
